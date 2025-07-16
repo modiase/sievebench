@@ -1,0 +1,13 @@
+# Go
+/sieve_go/sieve_go
+
+# C++ (Meson)
+/sieve_cpp/builddir/
+
+# Rust (Cargo)
+/sieve_rust/target/
+
+# Nix
+/flake.lock
+/.direnv/
+/result*
