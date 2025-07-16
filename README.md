@@ -89,9 +89,9 @@ The Rust version uses Cargo.
 
 ## Running the Benchmark
 
-The Python script will automatically build and run all implementations, executing each one multiple times to provide stable performance metrics.
+The `benchmark` script in the root of the project will automatically build and run all implementations, executing each one multiple times to provide stable performance metrics. It will also ensure that the benchmark is run inside the consistent Nix development environment.
 
 To run the full benchmark suite:
 ```sh
-python3 benchmark.py
+./benchmark
 ```

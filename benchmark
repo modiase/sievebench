@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if ! command -v nix >/dev/null 2>&1; then
+    echo "Error: nix is not installed or not in your PATH." >&2
+    echo "Please install Nix or ensure it is available to continue." >&2
+    exit 1
+fi
+
+nix develop -c python3 benchmark.py

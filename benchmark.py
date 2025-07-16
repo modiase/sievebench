@@ -22,8 +22,8 @@ def print_results(results):
 
 def main():
     """Main function to run the benchmark and print the results."""
-    n_values = [1_000_000, 10_000_000, 100_000_000]
-    num_runs = 5
+    n_values = [1_000_000, 10_000_000, 100_000_000, 1_000_000_000]
+    num_runs = 3
     
     # --- Go Benchmark ---
     print("--- Go Benchmark ---")
