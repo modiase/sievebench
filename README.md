@@ -51,6 +51,27 @@ The C++ version uses the Meson build system.
     ./sieve_cpp/builddir/sieve_cpp 10000000
     ```
 
+### Fortran
+
+The Fortran version also uses Meson.
+
+1.  **Configure the build (only needs to be done once):**
+    ```sh
+    cd sieve_fortran
+    meson setup builddir
+    ```
+
+2.  **Compile the code:**
+    ```sh
+    cd sieve_fortran
+    meson compile -C builddir
+    ```
+
+3.  **Run the executable:**
+    ```sh
+    ./sieve_fortran/builddir/sieve_fortran 10000000
+    ```
+
 ### Rust
 
 The Rust version uses Cargo.

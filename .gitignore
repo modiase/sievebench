@@ -4,6 +4,9 @@
 # C++ (Meson)
 /sieve_cpp/builddir/
 
+# Fortran (Meson)
+/sieve_fortran/builddir/
+
 # Rust (Cargo)
 /sieve_rust/target/
 

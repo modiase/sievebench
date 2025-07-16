@@ -1,5 +1,5 @@
 {
-  description = "A C++/Go/Rust project";
+  description = "A C++/Go/Rust/Fortran project";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,14 +13,14 @@
     {
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
-          # C++
+          # Build tools
           meson
           ninja
           pkg-config
-          gcc
-          # Go
+          # Compilers
+          gcc # Provides C and C++
+          gfortran # Provides Fortran
           go
-          # Rust
           cargo
           rustc
         ];

@@ -51,8 +51,8 @@ def main():
     print("\n--- C++ Benchmark ---")
     print("Building C++ code...")
     cpp_dir = "sieve_cpp"
-    subprocess.run(["nix", "develop", "-c", "meson", "setup", "builddir"], cwd=cpp_dir, check=True, capture_output=True)
-    subprocess.run(["nix", "develop", "-c", "meson", "compile", "-C", "builddir"], cwd=cpp_dir, check=True, capture_output=True)
+    subprocess.run(["nix", "develop", "--command", "bash", "-c", f"cd {cpp_dir} && meson setup builddir --reconfigure"], check=True, capture_output=True)
+    subprocess.run(["nix", "develop", "--command", "bash", "-c", f"cd {cpp_dir} && meson compile -C builddir"], check=True, capture_output=True)
     
     cpp_results = {}
     cpp_executable = os.path.join(cpp_dir, "builddir", "sieve_cpp")
@@ -65,13 +65,30 @@ def main():
         }
     print_results(cpp_results)
 
+    # --- Fortran Benchmark ---
+    print("\n--- Fortran Benchmark ---")
+    print("Building Fortran code...")
+    fortran_dir = "sieve_fortran"
+    subprocess.run(["nix", "develop", "--command", "bash", "-c", f"cd {fortran_dir} && meson setup builddir --reconfigure"], check=True, capture_output=True)
+    subprocess.run(["nix", "develop", "--command", "bash", "-c", f"cd {fortran_dir} && meson compile -C builddir"], check=True, capture_output=True)
+
+    fortran_results = {}
+    fortran_executable = os.path.join(fortran_dir, "builddir", "sieve_fortran")
+    for n in n_values:
+        times = [run_command([f"./{fortran_executable}", str(n)]) for _ in range(num_runs)]
+        fortran_results[n] = {
+            'mean': statistics.mean(times),
+            'best': min(times),
+            'std_dev': statistics.stdev(times) if len(times) > 1 else 0.0
+        }
+    print_results(fortran_results)
+
     # --- Rust Benchmark ---
     print("\n--- Rust Benchmark ---")
     print("Building Rust code with optimizations...")
     rust_dir = "sieve_rust"
     subprocess.run(
-        ["nix", "develop", "-c", "cargo", "build", "--release"],
-        cwd=rust_dir,
+        ["nix", "develop", "--command", "bash", "-c", f"cd {rust_dir} && cargo build --release"],
         check=True,
         capture_output=True
     )
