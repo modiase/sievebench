@@ -89,9 +89,14 @@ The Rust version uses Cargo.
 
 ## Running the Benchmark
 
-The `benchmark` script in the root of the project will automatically build and run all implementations, executing each one multiple times to provide stable performance metrics. It will also ensure that the benchmark is run inside the consistent Nix development environment.
+The `benchmark` script in the root of the project will automatically build and run all implementations, executing each one multiple times to provide stable performance metrics. It uses `hyperfine` for benchmarking and runs within a consistent Nix development environment.
 
 To run the full benchmark suite:
 ```sh
 ./benchmark
+```
+
+To see the output from the build commands, use the `-v` (verbose) flag:
+```sh
+./benchmark -v
 ```

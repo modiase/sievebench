@@ -8,13 +8,15 @@ program sieve_fortran
   logical, allocatable :: is_prime(:)
   integer(kind=8) :: p, i, limit, count
 
-  ! Get N from the command line
+  ! Get P from the command line and calculate N = 10^P
   if (command_argument_count() /= 1) then
-    write(*, '(a)') "Usage: ./sieve_fortran <N>"
+    write(*, '(a)') "Usage: ./sieve_fortran <P>"
+    write(*, '(a)') "Calculates primes up to 10^P"
     stop 1
   end if
   call get_command_argument(1, arg, status=status)
-  read(arg, *) n
+  read(arg, *) p
+  n = 10**p
 
   if (n < 2) then
     count = 0

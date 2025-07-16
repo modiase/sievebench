@@ -1,9 +1,86 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-if ! command -v nix >/dev/null 2>&1; then
-    echo "Error: nix is not installed or not in your PATH." >&2
-    echo "Please install Nix or ensure it is available to continue." >&2
-    exit 1
+# --- Argument Parsing for Verbose Flag ---
+verbose=false
+while getopts "v" opt; do
+  case ${opt} in
+    v ) verbose=true
+      ;;
+    \? ) echo "Usage: cmd [-v]"
+         exit 1
+      ;;
+  esac
+done
+
+# --- Nix Environment Check ---
+if [ -z "${IN_NIX_SHELL}" ]; then
+  echo "--> Not in Nix environment. Re-executing with 'nix develop'..."
+  exec nix develop --command "$0" "$@"
 fi
 
-nix develop -c python3 benchmark.py
+set -e
+
+cd "$(dirname "$0")"
+
+# --- Helper function for building ---
+run_build() {
+  local description=$1
+  shift
+  local command_str=$@
+
+  echo "$description"
+  if [ "$verbose" = true ]; then
+    (eval "$command_str")
+  else
+    (eval "$command_str") > /dev/null 2>&1
+  fi
+}
+
+# --- Build Step ---
+echo "Building all implementations..."
+
+run_build "Building Go..." "cd sieve_go && go build -ldflags='-s -w' -o sieve_go ."
+run_build "Building C++..." "cd sieve_cpp && meson setup builddir --reconfigure && meson compile -C builddir"
+run_build "Building Fortran..." "cd sieve_fortran && meson setup builddir --reconfigure && meson compile -C builddir"
+run_build "Building Rust..." "cd sieve_rust && cargo build --release"
+
+echo "All builds complete."
+
+# --- Benchmark Step ---
+P_VALUES="7 8 9"
+RUNS=3
+
+HYPERFINE_OPTS="--runs ${RUNS}"
+
+print_header() {
+  echo ""
+  echo "--- $1 Benchmark ---"
+}
+
+# --- Go Benchmark ---
+print_header "Go"
+for p in ${P_VALUES}; do
+  echo "Benchmarking for N = 10^${p}"
+  hyperfine ${HYPERFINE_OPTS} "./sieve_go/sieve_go ${p}"
+done
+
+# --- C++ Benchmark ---
+print_header "C++"
+for p in ${P_VALUES}; do
+  echo "Benchmarking for N = 10^${p}"
+  hyperfine ${HYPERFINE_OPTS} "./sieve_cpp/builddir/sieve_cpp ${p}"
+done
+
+# --- Fortran Benchmark ---
+print_header "Fortran"
+for p in ${P_VALUES}; do
+  echo "Benchmarking for N = 10^${p}"
+  hyperfine ${HYPERFINE_OPTS} "./sieve_fortran/builddir/sieve_fortran ${p}"
+done
+
+# --- Rust Benchmark ---
+print_header "Rust"
+for p in ${P_VALUES}; do
+  echo "Benchmarking for N = 10^${p}"
+  hyperfine ${HYPERFINE_OPTS} "./sieve_rust/target/release/sieve_rust ${p}"
+done

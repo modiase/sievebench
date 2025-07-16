@@ -13,6 +13,9 @@
     {
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
+          # Benchmarking
+          hyperfine
+          jq
           # Build tools
           meson
           ninja
@@ -27,3 +30,4 @@
       };
     };
 }
+

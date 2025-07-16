@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"runtime"
 	"strconv"
@@ -10,16 +11,18 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run sieve.go <N>")
+		fmt.Println("Usage: go run sieve.go <P>")
+		fmt.Println("Calculates primes up to 10^P")
 		return
 	}
 
-	nStr := os.Args[1]
-	N, err := strconv.Atoi(nStr)
+	pStr := os.Args[1]
+	p, err := strconv.Atoi(pStr)
 	if err != nil {
-		fmt.Println("Invalid number:", nStr)
+		fmt.Println("Invalid power:", pStr)
 		return
 	}
+	N := int(math.Pow10(p))
 
 	numCPU := runtime.NumCPU()
 	runtime.GOMAXPROCS(numCPU)

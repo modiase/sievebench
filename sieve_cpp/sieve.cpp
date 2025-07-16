@@ -17,11 +17,14 @@ void sieve_worker(std::vector<char>& primes, int start, int end) {
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <N>" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <P>" << std::endl;
+        std::cerr << "Calculates primes up to 10^P" << std::endl;
         return 1;
     }
 
-    int n = std::atoi(argv[1]);
+    int p = std::atoi(argv[1]);
+    long long n = static_cast<long long>(std::pow(10, p));
+
     if (n <= 1) {
         return 0;
     }
