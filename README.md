@@ -12,15 +12,15 @@ tools.
 ## Building and Running Manually
 
 You can build and run each language's implementation individually. Replace
-`10000000` with the desired upper limit (N).
+`9` with the desired upper limit (N).
 
 ### Go
 
-`sh cd sieve_go go run . 10000000 `
+`sh cd sieve_go go run . 9 `
 
 To build an optimized executable:
 
-```sh cd sieve_go go build -ldflags="-s -w" -o sieve_go . ./sieve_go 10000000
+```sh cd sieve_go go build -ldflags="-s -w" -o sieve_go . ./sieve_go 9
 
 ```
 
@@ -36,7 +36,7 @@ The C++ version uses the Meson build system.
 
     `sh cd sieve_cpp meson compile -C builddir `
 
-3.  **Run the executable:** `sh ./sieve_cpp/builddir/sieve_cpp 10000000 `
+3.  **Run the executable:** `sh ./sieve_cpp/builddir/sieve_cpp 9 `
 
 ### Fortran
 
@@ -51,7 +51,7 @@ The Fortran version also uses Meson.
     `sh cd sieve_fortran meson compile -C builddir `
 
 3.  **Run the executable:** `sh ./sieve_fortran/builddir/sieve_fortran
-10000000 `
+9 `
 
 ### Rust
 
@@ -62,7 +62,7 @@ The Rust version uses Cargo.
     `sh cd sieve_rust cargo build --release `
 
 2.  **Run the executable:** `sh ./sieve_rust/target/release/sieve_rust
-10000000 `
+9 `
 
 ## Running the Benchmark
 
